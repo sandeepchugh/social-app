@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "L0uX2Kfj3fNB9CB2PdjY4mDaNfQNhKT2CQ+BWRoJkB8riHLCOFyp0lbcp+CuQHAaN7xnSabqv43k9ZW2ZZvBiw==",
+  "success": true,
+  "projectFilePath": "/Users/sandeepchugh/dev/social-app/Application/Application.csproj",
+  "expectedPackageFiles": [
+    "/usr/local/share/dotnet/sdk/NuGetFallbackFolder/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "/usr/local/share/dotnet/sdk/NuGetFallbackFolder/netstandard.library/2.0.3/netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
