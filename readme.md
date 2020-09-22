@@ -55,3 +55,20 @@ cd Api
 dotnet add reference ../Application/Application.csproj 
 ```
 
+#### Tool dependencies
+
+```shell script
+dotnet tool install --global dotnet-ef
+```
+
+#### Database Setup
+
+```shell script
+dotnet ef migrations add InitialCreate -p Persistence/ -s Api/
+```
+
+#### Adding Seed Data
+
+```shell script
+dotnet ef migration add SeedValues -p Persistence/ -s Api/
+```
