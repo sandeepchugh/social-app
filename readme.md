@@ -70,5 +70,11 @@ dotnet ef migrations add InitialCreate -p Persistence/ -s Api/
 #### Adding Seed Data
 
 ```shell script
-dotnet ef migration add SeedValues -p Persistence/ -s Api/
+dotnet ef migrations add SeedValues -p Persistence/ -s Api/
 ```
+
+#### React App Setup
+```shell script
+npx create-react-app client-app --use-npm --typescript
+```
+Readme -> /client-app/README.md
