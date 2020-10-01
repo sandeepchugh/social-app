@@ -70,7 +70,7 @@ dotnet ef migrations add InitialCreate -p Persistence/ -s Api/
 #### Adding Seed Data
 
 ```shell script
-dotnet ef migrations add SeedValues -p Persistence/ -s Api/
+dotnet ef migrations add SeedActivities -p Persistence/ -s Api/
 ```
 
 #### React App Setup
