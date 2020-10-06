@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Application.Activities;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -13,86 +12,41 @@ namespace API.Controllers
     [ApiController]
     public class ActivitiesController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IMediator _mediator;
+        public ActivitiesController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
 
-        public ActivitiesController(DataContext context) => _context = context;
-
-        // GET api/values
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Activity>>> Get()
+        public async Task<ActionResult<List<Activity>>> List()
         {
-            var activities = await _context.Activities.ToListAsync();
-
-            activities = new List<Activity>{
-                new Activity
-                    {
-                        Id = 1,
-                        Title = "Future Activity 5",
-                        Date = DateTime.Now.AddMonths(5),
-                        Description = "Activity 5 months in future",
-                        Category = "drinks",
-                        City = "London",
-                        Venue = "Just another pub",
-                    },
-                    new Activity
-                    {
-                        Id = 2,
-                        Title = "Future Activity 6",
-                        Date = DateTime.Now.AddMonths(6),
-                        Description = "Activity 6 months in future",
-                        Category = "music",
-                        City = "London",
-                        Venue = "Roundhouse Camden",
-                    },
-                    new Activity
-                    {
-                        Id=3,
-                        Title = "Future Activity 7",
-                        Date = DateTime.Now.AddMonths(7),
-                        Description = "Activity 2 months ago",
-                        Category = "travel",
-                        City = "London",
-                        Venue = "Somewhere on the Thames",
-                    },
-                    new Activity
-                    {
-                        Id=4,
-                        Title = "Future Activity 8",
-                        Date = DateTime.Now.AddMonths(8),
-                        Description = "Activity 8 months in future",
-                        Category = "film",
-                        City = "London",
-                        Venue = "Cinema",
-                    }
-            };
-
-            return Ok(activities);
+            return await _mediator.Send(new List.Query());
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Activity>> Get(int id)
+        public async Task<ActionResult<Activity>> Details(Guid id)
         {
-            var activity = await _context.Activities.FindAsync(id);
-            return Ok(activity);
+            return await _mediator.Send(new Details.Query{Id = id});
         }
 
-        // POST api/activities
         [HttpPost]
-        public void Post([FromBody] string activity)
+        public async Task<ActionResult<Unit>> Create(Create.Command command)
         {
+            return await _mediator.Send(command);
         }
 
-        // PUT api/activities/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Activity activities)
+        public async Task<ActionResult<Unit>> Edit(Guid id, Edit.Command command)
         {
+            command.Id = id;
+            return await _mediator.Send(command);
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult<Unit>> Delete(Guid id)
         {
+            return await _mediator.Send(new Delete.Command{Id = id});
         }
     }
 }
