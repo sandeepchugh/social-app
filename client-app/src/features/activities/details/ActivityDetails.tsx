@@ -1,28 +1,40 @@
 import { observer } from 'mobx-react-lite';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { Button, Card, Image } from 'semantic-ui-react';
+import { LoadingComponent } from '../../../app/layout/LoadingComponent';
 import ActivityStore from '../../../app/stores/activityStore';
 
-const ActivityDetails: React.FC= () => {
+interface DetailParams {
+  id: string
+}
+
+const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match}) => {
     
   const activityStore = useContext(ActivityStore);
-  const  {selectedActivity,openEditForm,cancelSelectedActivity} = activityStore;
+  const  {activity, openEditForm, cancelSelectedActivity, loadActivity, loadingInitial} = activityStore;
+
+  useEffect(() => {
+    loadActivity(match.params.id);
+  }, [loadActivity])
+
+  if (loadingInitial || !activity) return <LoadingComponent content='Loading activity...'/>
 
   return (
         <Card fluid>
-            <Image src={`/assets/categoryImages/${selectedActivity!.category}.jpg`} wrapped ui={false}/>
+            <Image src={`/assets/categoryImages/${activity!.category}.jpg`} wrapped ui={false}/>
         <Card.Content>
-    <Card.Header>{selectedActivity!.title}</Card.Header>
+    <Card.Header>{activity!.title}</Card.Header>
           <Card.Meta>
-            <span>{selectedActivity!.date}</span>
+            <span>{activity!.date}</span>
           </Card.Meta>
           <Card.Description>
-          {selectedActivity!.description}
+          {activity!.description}
           </Card.Description>
         </Card.Content>
         <Card.Content extra>
             <Button.Group widths={2}>
-                <Button onClick={() => openEditForm(selectedActivity!.id)} basic color='blue' content='Edit'/>
+                <Button onClick={() => openEditForm(activity!.id)} basic color='blue' content='Edit'/>
                 <Button onClick={cancelSelectedActivity} basic color='grey' content='Cancel'/>
             </Button.Group>
         </Card.Content>
