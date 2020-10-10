@@ -1,58 +1,29 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { Grid } from "semantic-ui-react";
-import { IActivity } from "../../../app/models/activity";
 import ActivityDetails from "../details/ActivityDetails";
-import { ActivityForm } from "../form/ActivityForm";
+import ActivityForm from "../form/ActivityForm";
 import ActivityStore from "../../../app/stores/activityStore";
 import ActivityList from "./ActivityList";
 
-interface IProps {
-  setEditMode: (editMode: boolean) => void;
-  setSelectedActivity: (selectedActivity: IActivity | null) => void;
-  createActivity: (activity:IActivity) => void;
-  editActivity: (activity:IActivity) => void;
-  deleteActivity: (event: React.SyntheticEvent<HTMLButtonElement>, id: string) => void;
-  submitting: boolean;
-  target: string;
-}
 
-const ActivityDashboard: React.FC<IProps> = ({
-  setEditMode,
-  setSelectedActivity,
-  createActivity,
-  editActivity,
-  deleteActivity,
-  submitting,
-  target
-}) => {
+const ActivityDashboard: React.FC= () => {
   const activityStore = useContext(ActivityStore);
   const {editMode, selectedActivity } = activityStore;
 
   return (
     <Grid>
       <Grid.Column width={10}>
-        <ActivityList
-          deleteActivity={deleteActivity}
-          submitting= {submitting}
-          target={target}
-        ></ActivityList>
+        <ActivityList/>
       </Grid.Column>
       <Grid.Column width={6}>
         {selectedActivity && !editMode && (
-          <ActivityDetails
-            setEditMode={setEditMode}
-            setSelectedActivity={setSelectedActivity}
-          ></ActivityDetails>
+          <ActivityDetails/>
         )}
         {editMode && (
           <ActivityForm 
             key={selectedActivity && selectedActivity.id || 0}
-            setEditMode={setEditMode} 
             activity={selectedActivity!} 
-            createActivity={createActivity}
-            editActivity={editActivity}
-            submitting= {submitting}
             />
         )}
       </Grid.Column>
