@@ -1,5 +1,4 @@
 import axios, {AxiosResponse} from 'axios';
-import { act } from 'react-dom/test-utils';
 import { IActivity } from '../models/activity';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';

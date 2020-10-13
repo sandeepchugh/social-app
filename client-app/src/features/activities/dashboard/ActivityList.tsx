@@ -1,13 +1,13 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Item, Image, Button, Label, Segment } from "semantic-ui-react";
+import { Item, Button, Label, Segment } from "semantic-ui-react";
 import ActivityStore from '../../../app/stores/activityStore';
 
 
 const ActivityList: React.FC = () => {
   const activityStore = useContext(ActivityStore);
-  const {activitiesByDate:activities, selectActivity, deleteActivity,
+  const {activitiesByDate:activities, deleteActivity,
      submitting, target } = activityStore;
 
   return (
@@ -27,7 +27,7 @@ const ActivityList: React.FC = () => {
               <Item.Extra>
                 <Button
                   as={Link}
-                  to={`/activities/${activity.id}`}
+                  to={`/activities/view/${activity.id}`}
                   floated="right"
                   content="View"
                   color="blue"

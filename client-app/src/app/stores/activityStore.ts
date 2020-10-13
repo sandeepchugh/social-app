@@ -9,7 +9,7 @@ export class ActivityStore {
     @observable activityRegistry = new Map();
 
     @observable activities: IActivity[] = [];
-    @observable activity: IActivity | undefined;
+    @observable activity: IActivity | null = null;
     @observable loadingInitial = false;
     @observable editMode = false;
     @observable submitting = false;
@@ -63,6 +63,10 @@ export class ActivityStore {
     getActivity = (id:string) => {
         return this.activityRegistry.get(id);
     }
+
+    @action clearActivity = () => {
+        this.activity = null;
+    }
     
     @action createActivity = async (activity: IActivity) => {
         this.submitting = true;
@@ -111,7 +115,7 @@ export class ActivityStore {
             await agent.Activities.delete(id);
             runInAction('deleting activity',() => {
                 this.activityRegistry.delete(id);
-                this.activity = undefined;
+                this.activity = null;
                 this.submitting = false;
                 this.target = '';
             });
@@ -131,7 +135,7 @@ export class ActivityStore {
 
     @action openCreateForm = () => {
         this.editMode = true;
-        this.activity = undefined;
+        this.activity = null;
     }
 
     @action openEditForm = (id:string) => {
@@ -140,7 +144,7 @@ export class ActivityStore {
     }
 
     @action cancelSelectedActivity = () => {
-        this.activity = undefined;
+        this.activity = null;
     }
 
     @action cancelFormOpen = () => {
