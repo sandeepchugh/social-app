@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Form, Segment } from "semantic-ui-react";
+import { Button, Form, Grid, Segment } from "semantic-ui-react";
 import { IActivity } from "../../../app/models/activity";
-import {v4 as uuid } from 'uuid';
-import ActivityStore from '../../../app/stores/activityStore';
+import { v4 as uuid } from "uuid";
+import ActivityStore from "../../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
 
@@ -10,9 +10,20 @@ interface DetailParams {
   id: string;
 }
 
-const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
+const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
+  match,
+  history,
+}) => {
   const activityStore = useContext(ActivityStore);
-  const {loadActivity, createActivity,clearActivity, editActivity, submitting, cancelFormOpen, activity:initialiFormState} = activityStore;
+  const {
+    loadActivity,
+    createActivity,
+    clearActivity,
+    editActivity,
+    submitting,
+    cancelFormOpen,
+    activity: initialiFormState,
+  } = activityStore;
 
   const [activity, setActivity] = useState<IActivity>({
     id: "",
@@ -25,15 +36,22 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({match, histo
   });
 
   useEffect(() => {
-    if(match.params.id && activity.id.length === 0){
-      loadActivity(match.params.id)
-      .then( ()=> initialiFormState && setActivity(initialiFormState));
+    if (match.params.id && activity.id.length === 0) {
+      loadActivity(match.params.id).then(
+        () => initialiFormState && setActivity(initialiFormState)
+      );
     }
 
     return () => {
       clearActivity();
     };
-  }, [loadActivity, clearActivity, match.params.id,  initialiFormState, activity.id.length] )
+  }, [
+    loadActivity,
+    clearActivity,
+    match.params.id,
+    initialiFormState,
+    activity.id.length,
+  ]);
 
   const handleInputChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -43,69 +61,81 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({match, histo
   };
 
   const handleSubmit = () => {
-    if(activity.id.length === 0){
-        let newActivity = {
-            ...activity,
-            id: uuid()
-        }
-        createActivity(newActivity).then(() => 
-          history.push(`/activities/view/${newActivity.id}`));
+    if (activity.id.length === 0) {
+      let newActivity = {
+        ...activity,
+        id: uuid(),
+      };
+      createActivity(newActivity).then(() =>
+        history.push(`/activities/view/${newActivity.id}`)
+      );
     } else {
-        editActivity(activity).then(() => 
-        history.push(`/activities/view/${activity.id}`));
+      editActivity(activity).then(() =>
+        history.push(`/activities/view/${activity.id}`)
+      );
     }
   };
 
   return (
-    <Segment clearing>
-      <Form onSubmit={handleSubmit}>
-        <Form.Input
-          name="title"
-          onChange={handleInputChange}
-          placeholder="Title"
-          value={activity.title}
-        />
-        <Form.TextArea
-          name="description"
-          onChange={handleInputChange}
-          rows={2}
-          placeholder="Description"
-          value={activity.description}
-        />
-        <Form.Input
-          name="category"
-          onChange={handleInputChange}
-          placeholder="Category"
-          value={activity.category}
-        />
-        <Form.Input
-          name="date"
-          onChange={handleInputChange}
-          type="datetime-local"
-          placeholder="Date"
-          value={activity.date}
-        />
-        <Form.Input
-          name="city"
-          onChange={handleInputChange}
-          placeholder="City"
-          value={activity.city}
-        />
-        <Form.Input
-          name="venue"
-          onChange={handleInputChange}
-          placeholder="Venue"
-          value={activity.venue}
-        />
-        <Button loading={submitting} floated="right" positive type="submit" content="Submit" />
-        <Button
-          floated="right"
-          onClick={cancelFormOpen}
-          type="button"
-          content="Cancel"
-        />
-      </Form>
-    </Segment>
+    <Grid>
+      <Grid.Column width={10}>
+        <Segment clearing>
+          <Form onSubmit={handleSubmit}>
+            <Form.Input
+              name="title"
+              onChange={handleInputChange}
+              placeholder="Title"
+              value={activity.title}
+            />
+            <Form.TextArea
+              name="description"
+              onChange={handleInputChange}
+              rows={2}
+              placeholder="Description"
+              value={activity.description}
+            />
+            <Form.Input
+              name="category"
+              onChange={handleInputChange}
+              placeholder="Category"
+              value={activity.category}
+            />
+            <Form.Input
+              name="date"
+              onChange={handleInputChange}
+              type="datetime-local"
+              placeholder="Date"
+              value={activity.date}
+            />
+            <Form.Input
+              name="city"
+              onChange={handleInputChange}
+              placeholder="City"
+              value={activity.city}
+            />
+            <Form.Input
+              name="venue"
+              onChange={handleInputChange}
+              placeholder="Venue"
+              value={activity.venue}
+            />
+            <Button
+              loading={submitting}
+              floated="right"
+              positive
+              type="submit"
+              content="Submit"
+            />
+            <Button
+              floated="right"
+              onClick={cancelFormOpen}
+              type="button"
+              content="Cancel"
+            />
+          </Form>
+        </Segment>
+      </Grid.Column>
+    </Grid>
   );
 };
 
